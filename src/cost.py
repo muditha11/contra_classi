@@ -1,5 +1,6 @@
 import torch.nn as nn
 from torch.nn import TripletMarginLoss
+from torch.nn import CrossEntropyLoss as TorchCrossEntropyLoss
 
 
 class TripletLoss(nn.Module):
@@ -20,4 +21,14 @@ class TripletLoss(nn.Module):
         return loss
 
 
-# TODO : Classfication loss
+class CrossEntropyLoss:
+    """Classification loss definition"""
+
+    def __init__(self, device):
+        self.device = device
+        self.loss_fn = TorchCrossEntropyLoss()
+
+    def __call__(self, info, batch):
+        labels = batch[1].to(self.device)
+        loss = self.loss_fn(info, labels)
+        return loss
