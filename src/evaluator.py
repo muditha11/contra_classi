@@ -37,7 +37,7 @@ class Evaluator:
         self.logger.info("Initializing Evaluator")
 
         std_ds = EvaluationDataset(self.conf.data.data_dir, conf.data.splits.test)
-        self.std_dl = DataLoader(std_ds, batch_size=32, shuffle=False, pin_memory=True)
+        self.std_dl = DataLoader(std_ds, batch_size=16, shuffle=False, pin_memory=True)
 
         if "pet" in conf.data.splits.test:
             self.label_map = load_from_json(f"{self.conf.data.data_dir}/pet_labels.json")

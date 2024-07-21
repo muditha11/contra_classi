@@ -7,22 +7,9 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader, Subset
 from omegaconf import OmegaConf, DictConfig
 
-from src.utils import configure_logger, load_ckp, TensorboardLogger
+from src.utils import configure_logger, load_ckp, load_module, TensorboardLogger
 from src.trainer import Trainer
 from src.evaluator import Evaluator
-
-
-######## Imports to be set ########
-# Change the dataset,model,cost import names
-
-# from src.dataset import ClassficationDataset as Dataset
-# from src.model import ClassificationModel as Model
-# from src.cost import CrossEntropyLoss as Loss
-
-from src.dataset import TripletDataset as Dataset
-from src.model import TripletModel as Model
-from src.cost import TripletLoss as Loss
-
 
 class Pipeline:
     """
@@ -84,7 +71,8 @@ class Pipeline:
         """
 
         # Recheck inputs
-        self.train_ds = Dataset(self.conf.data.data_dir, self.conf.data.splits.train)
+        dataset_class = load_module(self.conf.data.target)
+        self.train_ds = dataset_class(self.conf.data.data_dir, self.conf.data.splits.train)
         if self.mock_batch_count != -1:
             self.train_ds = Subset(
                 self.train_ds,
@@ -100,7 +88,7 @@ class Pipeline:
         self.val_dl = None
         if "val" in self.conf:
             # Recheck inputs
-            self.val_ds = Dataset(self.conf.data.data_dir, self.conf.data.splits.val)
+            self.val_ds = dataset_class(self.conf.data.data_dir, self.conf.data.splits.val)
             if self.mock_batch_count != -1:
                 self.val_ds = Subset(
                     self.val_ds,
@@ -123,7 +111,8 @@ class Pipeline:
         Also configure the freezing setup as needed
         """
         # Recheck inputs
-        self.model = Model(device=self.device, **dict(self.conf.model.params))
+        model_class = load_module(self.conf.model.target)
+        self.model = model_class(device=self.device, **dict(self.conf.model.params))
 
         for param in self.model.parameters():
             param.requires_grad = not (self.conf.model.freeze.encoder)
@@ -135,7 +124,8 @@ class Pipeline:
                  --> Schedular
         """
         ## Loss
-        self.criterion = Loss(self.device)
+        loss_class = load_module(self.conf.loss.target)
+        self.criterion = loss_class(self.device)
 
         ## Optimizer
         self.optimizer = torch.optim.Adam(

@@ -1,5 +1,6 @@
 import os
 import logging
+import importlib
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
@@ -109,3 +110,12 @@ def load_ckp(checkpoint_fpath: str, model, optimizer):
     model.load_state_dict(checkpoint["state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer"])
     return model, optimizer, checkpoint["epoch"], checkpoint["best_loss"]
+
+
+def load_module(target):
+    """loads a class using a target"""
+    *module_name, class_name = target.split(".")
+    module_name = ".".join(module_name)
+    module = importlib.import_module(module_name)
+    obj = getattr(module, class_name)
+    return obj

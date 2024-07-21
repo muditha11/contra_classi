@@ -4,6 +4,7 @@ resume: False
 # run: 0
 
 data:
+    target: src.dataset.TripletDataset
     data_dir: "/home/avishka/muditha/contra_classi/data/annots"
     splits:
         train: "pet_triplet_train"
@@ -11,6 +12,7 @@ data:
         test: "pet_test" 
 
 model:
+    target: src.model.TripletModel
     params:
         base_model: "convnext_tiny"
         version: "fb_in22k"
@@ -18,8 +20,8 @@ model:
     freeze: 
         encoder: False
 
-# loss:
-#     params:
+loss:
+    target: src.cost.TripletLoss
     
 optimizer:
     lr: 0.00005
@@ -34,14 +36,14 @@ lr_schedular:
 
 train:
     loader_params:
-        batch_size: 32
+        batch_size: 64
         shuffle: True
         num_workers: 8
     epochs: 100
 
 val:
     loader_params:
-            batch_size: 16
+            batch_size: 8
             shuffle: False
             num_workers: 8
 

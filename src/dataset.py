@@ -1,3 +1,4 @@
+import os
 import random
 import json
 
@@ -9,6 +10,12 @@ from torchvision import transforms
 from torchvision.transforms import v2
 
 from .constants import image_mean, image_std, img_hw
+
+def pick_random_pos(p_list,anchor):
+    while True:
+        p = random.choice(p_list)
+        if p!=anchor:
+            return p
 
 
 def load_from_json(filename: str):
@@ -51,9 +58,18 @@ class TripletDataset(Dataset):
     def __getitem__(self, index):
 
         a, p, n = self.triplets[index]
+
+        img_root = "/".join(a.split("/")[:-2])
+
+        pos_dir = os.listdir(f"{img_root}/{p}")
+        neg_dir = os.listdir(f"{img_root}/{n}")
+
+        p_im = pick_random_pos(pos_dir,a)
+        n_im = random.choice(neg_dir)
+
         anchor = Image.open(a).convert("RGB")
-        positive = Image.open(p).convert("RGB")
-        negative = Image.open(n).convert("RGB")
+        positive = Image.open(f"{img_root}/{p}/{p_im}").convert("RGB")
+        negative = Image.open(f"{img_root}/{n}/{n_im}").convert("RGB")
 
         return (
             self.transform(anchor),
