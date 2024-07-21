@@ -1,7 +1,7 @@
 out_dir: /home/avishka/muditha/contra_classi/logs
 name: contrastive_convnext_pet
-resume: False
-# run: 0
+resume: True
+run: 0
 
 data:
     target: src.dataset.TripletDataset
@@ -43,7 +43,7 @@ train:
 
 val:
     loader_params:
-            batch_size: 8
+            batch_size: 4
             shuffle: False
             num_workers: 8
 

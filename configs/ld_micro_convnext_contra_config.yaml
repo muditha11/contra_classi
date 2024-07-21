@@ -1,28 +1,27 @@
 out_dir: /home/avishka/muditha/contra_classi/logs
-name: classification_convnext_pet
+name: ld_contrastive_convnext_micro
 resume: False
 # run: 0
 
 data:
-    target: src.dataset.ClassficationDataset
+    target: src.dataset.TripletDataset
     data_dir: "/home/avishka/muditha/contra_classi/data/annots"
     splits:
-        train: "pet_train"
-        val: "pet_val"
-        test: "pet_test" 
+        train: "low_data_micro_triplet_train"
+        val: "low_data_micro_triplet_val"
+        test: "low_data_micro_test" 
 
 model:
-    target: src.model.ClassificationModel
+    target: src.model.TripletModel
     params:
         base_model: "convnext_tiny"
         version: "fb_in22k"
-        classes: 37
         # weights: 
     freeze: 
         encoder: False
 
 loss:
-    target: src.cost.CrossEntropyLoss
+    target: src.cost.TripletLoss
     
 optimizer:
     lr: 0.00005
@@ -37,14 +36,14 @@ lr_schedular:
 
 train:
     loader_params:
-        batch_size: 128
+        batch_size: 64
         shuffle: True
         num_workers: 8
     epochs: 100
 
 val:
     loader_params:
-            batch_size: 16
+            batch_size: 8
             shuffle: False
             num_workers: 8
 

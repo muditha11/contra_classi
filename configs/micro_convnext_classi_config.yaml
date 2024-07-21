@@ -1,5 +1,5 @@
 out_dir: /home/avishka/muditha/contra_classi/logs
-name: classification_convnext_pet
+name: classification_convnext_micro
 resume: False
 # run: 0
 
@@ -7,16 +7,16 @@ data:
     target: src.dataset.ClassficationDataset
     data_dir: "/home/avishka/muditha/contra_classi/data/annots"
     splits:
-        train: "pet_train"
-        val: "pet_val"
-        test: "pet_test" 
+        train: "micro_train"
+        val: "micro_val"
+        test: "micro_test" 
 
 model:
     target: src.model.ClassificationModel
     params:
         base_model: "convnext_tiny"
         version: "fb_in22k"
-        classes: 37
+        classes: 5
         # weights: 
     freeze: 
         encoder: False

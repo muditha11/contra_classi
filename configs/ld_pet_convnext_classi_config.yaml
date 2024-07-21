@@ -1,5 +1,5 @@
 out_dir: /home/avishka/muditha/contra_classi/logs
-name: classification_convnext_pet
+name: ld_classification_convnext_pet
 resume: False
 # run: 0
 
@@ -7,9 +7,9 @@ data:
     target: src.dataset.ClassficationDataset
     data_dir: "/home/avishka/muditha/contra_classi/data/annots"
     splits:
-        train: "pet_train"
-        val: "pet_val"
-        test: "pet_test" 
+        train: "low_data_pet_train"
+        val: "low_data_pet_val"
+        test: "low_data_pet_test" 
 
 model:
     target: src.model.ClassificationModel

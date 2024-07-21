@@ -37,7 +37,7 @@ class Evaluator:
         self.logger.info("Initializing Evaluator")
 
         std_ds = EvaluationDataset(self.conf.data.data_dir, conf.data.splits.test)
-        self.std_dl = DataLoader(std_ds, batch_size=16, shuffle=False, pin_memory=True)
+        self.std_dl = DataLoader(std_ds, batch_size=4, shuffle=False, pin_memory=True)
 
         if "pet" in conf.data.splits.test:
             self.label_map = load_from_json(f"{self.conf.data.data_dir}/pet_labels.json")
@@ -77,7 +77,7 @@ class Evaluator:
         labels = np.array(labels)
 
         ## Clustering
-        tsne = TSNE(n_components=2, random_state=42)
+        tsne = TSNE(n_components=2, random_state=42,perplexity=6)
         embeddings_2d = tsne.fit_transform(embed)
 
         df = pd.DataFrame(embeddings_2d, columns=["Dim1", "Dim2"])
