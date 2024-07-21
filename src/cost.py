@@ -6,7 +6,7 @@ from torch.nn import CrossEntropyLoss as TorchCrossEntropyLoss
 class TripletLoss(nn.Module):
     """Triplet Loss definition"""
 
-    def __init__(self, device: int = 0):
+    def __init__(self, device):
         super(TripletLoss, self).__init__()
         self.device = device
         self.triplet_loss = TripletMarginLoss(margin=1, p=2, eps=1e-7)

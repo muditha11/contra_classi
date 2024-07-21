@@ -3,7 +3,6 @@ import torch
 import timm
 
 
-# TODO: robust to multiple models
 class Encoder(nn.Module):
     """Encoder class definition"""
 
@@ -18,7 +17,11 @@ class Encoder(nn.Module):
         self.model = timm.create_model(
             f"{base_model}.{version}", pretrained=True, num_classes=2
         )
-        self.model.head.fc = nn.Identity()
+        if base_model == "convnext_tiny":
+            self.model.head.fc = nn.Identity()
+
+        if base_model == "vit_base_patch16_224":
+            self.model.head = nn.Identity()
 
         if checkpoint is not None:
             ckpt = torch.load(checkpoint)
@@ -72,4 +75,30 @@ class TripletModel(nn.Module):
         return anchor_out, positive_out, negative_out
 
 
-# TODO: classification model
+class ClassificationModel(nn.Module):
+    """Classification model definition"""
+
+    def __init__(self, base_model: str, version: str, classes:int,device: int = 0, weights=None):
+        super().__init__()
+        self.base_model = base_model
+        self.encoder = Encoder(base_model, version, device, weights)
+        self.decoder = nn.Linear(768,classes)
+        self.device = device
+        self.to(device)
+
+    def save_encoder(self, path):
+        """saves the encoder to input path
+
+        Args:
+            path (str): where to save the model to
+        """
+        self.encoder.save_encoder(path)
+
+    def forward(self, batch):
+        """forward method"""
+
+        x = batch[0]
+        x = x.to(self.device)
+        y = self.encoder(x).flatten(start_dim=1)
+        y = self.decoder(y)
+        return y

@@ -82,7 +82,7 @@ class Trainer:
                     checkpoint,
                     self.out_dir,
                     is_best=True,
-                    specialPrefix=conf.model.params.base_model,
+                    special_prefix=conf.model.params.base_model,
                 )
                 model.save_encoder(f"{self.out_dir}/ckpts")
                 self.logger.info("Saving best model...........................")

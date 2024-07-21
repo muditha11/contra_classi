@@ -22,7 +22,7 @@ def load_txt_to_list(path: str):
     loaded_data = []
     with open(path, "r") as file:
         for line in file:
-            inner_list = list(map(int, line.strip().split(",")))
+            inner_list = line.strip().split(" ")
             loaded_data.append(inner_list)
     return loaded_data
 
@@ -32,7 +32,7 @@ class TripletDataset(Dataset):
 
     def __init__(self, data_dir: str, split: str):
 
-        root = f"{data_dir}/{split}"
+        root = f"{data_dir}/{split}.txt"
         self.triplets = load_txt_to_list(root)
 
         normalize = v2.Normalize(mean=image_mean, std=image_std)
@@ -62,34 +62,33 @@ class TripletDataset(Dataset):
         )
 
 
-# TODO : Complete this
 class ClassficationDataset(Dataset):
+    """Classification dataset definition"""
 
     def __init__(
         self,
-        root="./data/oxford-iiit-pet",
-        split="train",
+        root:str,
+        split:str,
     ):
 
         self.root = root
         self.split = split
+        if "pet" in self.split:
+            self.classes_label_map = load_from_json(f"{root}/pet_labels.json")
+        else:
+            self.classes_label_map = load_from_json(f"{root}/micro_labels.json")
 
-        with open(f"{root}/annots/" + split + ".txt", "r") as file:
+        with open(f"{root}/" + split + ".txt", "r") as file:
             read_list = [line.strip() for line in file.readlines()]
         self.imgs = read_list
 
-        self.transform_train = transforms.Compose(
+        normalize = v2.Normalize(mean=image_mean, std=image_std)
+        self.transform = transforms.Compose(
             [
-                transforms.RandomResizedCrop(img_hw[::-1], scale=[0.8, 1.0]),
-                transforms.RandomHorizontalFlip(),
+                transforms.Resize((224, 224)),
+                transforms.RandomHorizontalFlip(p=0.5),
                 transforms.ToTensor(),
-            ]
-        )
-
-        self.transform_test = transforms.Compose(
-            [
-                transforms.Resize(img_hw[::-1]),
-                transforms.ToTensor(),
+                normalize,
             ]
         )
 
@@ -99,13 +98,17 @@ class ClassficationDataset(Dataset):
     def __getitem__(self, idx):
         img_loc = self.imgs[idx]
 
-        label = classes_label_map[
-            "_".join(img_loc.split("/")[-1].split(".")[0].split("_")[:-1])
-        ]
+        if "pet" in self.split:
+            label = self.classes_label_map[
+                "_".join(img_loc.split("/")[-1].split(".")[0].split("_")[:-1])
+            ]
+
+        else:
+            label = self.classes_label_map[
+                img_loc.split("/")[-2]
+            ]
 
         image = Image.open(img_loc).convert("RGB")
-        if self.split in ["test", "val"]:
-            tensor_image = self.transform_test(image)
-        else:
-            tensor_image = self.transform_train(image)
+        tensor_image = self.transform(image)
+
         return tensor_image, label

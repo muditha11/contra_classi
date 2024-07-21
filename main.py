@@ -15,6 +15,10 @@ from src.evaluator import Evaluator
 ######## Imports to be set ########
 # Change the dataset,model,cost import names
 
+# from src.dataset import ClassficationDataset as Dataset
+# from src.model import ClassificationModel as Model
+# from src.cost import CrossEntropyLoss as Loss
+
 from src.dataset import TripletDataset as Dataset
 from src.model import TripletModel as Model
 from src.cost import TripletLoss as Loss
@@ -190,7 +194,7 @@ class Pipeline:
         )
 
         ## Data setup ##
-        self._set_data(self.mock_batch_count)
+        self._set_data()
         self.logger.info(f"Dataloaders set for the experiment")
 
         ## Model setup ##
