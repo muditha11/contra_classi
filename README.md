@@ -29,6 +29,12 @@ We test our model on  <a href="https://pytorch.org/vision/main/generated/torchvi
 | `micro_classification_convnext`  |       85.54%          |  
 | `micro_contrastive_convnext`     |       <b>97.43%</b>   |
 
+Pet dataset<br>
+![pet](images/pet_full.png)<br>
+
+Micro dataset<br>
+![micro](images/micro_full.png)<br>
+
 - <b>Low data (using 15 images per class)</b>
 
 | Model                            | K-means acc           |  
@@ -38,7 +44,10 @@ We test our model on  <a href="https://pytorch.org/vision/main/generated/torchvi
 | `micro_classification_convnext`  |       56.67%          |  
 | `micro_contrastive_convnext`     |       <b>66.67%</b>   |
 
-futher qualitative analysis is available below.
+Pet dataset<br>
+![pet](images/pet_low_data.png)<br>
+
+
 
 annots: https://drive.google.com/drive/folders/1a-zzC2Gyu-7nwQ6KanNKCFcw099U6E6w?usp=sharing
 
