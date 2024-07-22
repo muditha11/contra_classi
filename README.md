@@ -47,6 +47,10 @@ Micro dataset<br>
 Pet dataset<br>
 ![pet](images/pet_low_data.png)<br>
 
+All clustering plots can be viewed interactively [here](outputs).
+
+## Reproduce results
+
 
 
 annots: https://drive.google.com/drive/folders/1a-zzC2Gyu-7nwQ6KanNKCFcw099U6E6w?usp=sharing
