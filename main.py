@@ -11,6 +11,7 @@ from src.utils import configure_logger, load_ckp, load_module, TensorboardLogger
 from src.trainer import Trainer
 from src.evaluator import Evaluator
 
+
 class Pipeline:
     """
     This the full pipeline
@@ -72,7 +73,9 @@ class Pipeline:
 
         # Recheck inputs
         dataset_class = load_module(self.conf.data.target)
-        self.train_ds = dataset_class(self.conf.data.data_dir, self.conf.data.splits.train)
+        self.train_ds = dataset_class(
+            self.conf.data.data_dir, self.conf.data.splits.train
+        )
         if self.mock_batch_count != -1:
             self.train_ds = Subset(
                 self.train_ds,
@@ -88,7 +91,9 @@ class Pipeline:
         self.val_dl = None
         if "val" in self.conf:
             # Recheck inputs
-            self.val_ds = dataset_class(self.conf.data.data_dir, self.conf.data.splits.val)
+            self.val_ds = dataset_class(
+                self.conf.data.data_dir, self.conf.data.splits.val
+            )
             if self.mock_batch_count != -1:
                 self.val_ds = Subset(
                     self.val_ds,

@@ -1,3 +1,9 @@
+"""
+--- Evaluator definition ---
+available evaluation methods:
+    clustering
+"""
+
 import gc
 from typing import List
 import numpy as np
@@ -14,15 +20,15 @@ from .utils import configure_logger
 from .dataset import ClassficationDataset as EvaluationDataset,load_from_json
 
 
-def mean_euclidean_distance(embeddings1: List, embeddings2: List):
-    """
-    Given two lists of embeddings, find the mean distance between all embeddings.
-    """
-    distances = []
-    for e1 in embeddings1:
-        for e2 in embeddings2:
-            distances.append(euclidean(e1[0], e2[0]))
-    return np.mean(distances)
+# def mean_euclidean_distance(embeddings1: List, embeddings2: List):
+#     """
+#     Given two lists of embeddings, find the mean distance between all embeddings.
+#     """
+#     distances = []
+#     for e1 in embeddings1:
+#         for e2 in embeddings2:
+#             distances.append(euclidean(e1[0], e2[0]))
+#     return np.mean(distances)
 
 
 class Evaluator:

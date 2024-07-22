@@ -1,3 +1,12 @@
+"""
+--- Model definition ---
+available classes:
+    Encoder
+    Triplet model
+    Classification model
+"""
+
+
 import torch.nn as nn
 import torch
 import timm

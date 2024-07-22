@@ -1,3 +1,10 @@
+"""
+--- Loss definition ---
+available classes:
+    Triplet Loss
+    CrossEntropy Loss
+"""
+
 import torch.nn as nn
 from torch.nn import TripletMarginLoss
 from torch.nn import CrossEntropyLoss as TorchCrossEntropyLoss

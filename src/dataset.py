@@ -1,3 +1,10 @@
+"""
+--- Dataset definition ---
+available classes:
+    Triplet Dataset
+    Classfication Dataset
+"""
+
 import os
 import random
 import json
@@ -11,10 +18,11 @@ from torchvision.transforms import v2
 
 from .constants import image_mean, image_std, img_hw
 
-def pick_random_pos(p_list,anchor):
+
+def pick_random_pos(p_list, anchor):
     while True:
         p = random.choice(p_list)
-        if p!=anchor:
+        if p != anchor:
             return p
 
 
@@ -64,7 +72,7 @@ class TripletDataset(Dataset):
         pos_dir = os.listdir(f"{img_root}/{p}")
         neg_dir = os.listdir(f"{img_root}/{n}")
 
-        p_im = pick_random_pos(pos_dir,a)
+        p_im = pick_random_pos(pos_dir, a)
         n_im = random.choice(neg_dir)
 
         anchor = Image.open(a).convert("RGB")
@@ -83,8 +91,8 @@ class ClassficationDataset(Dataset):
 
     def __init__(
         self,
-        root:str,
-        split:str,
+        root: str,
+        split: str,
     ):
 
         self.root = root
@@ -120,9 +128,7 @@ class ClassficationDataset(Dataset):
             ]
 
         else:
-            label = self.classes_label_map[
-                img_loc.split("/")[-2]
-            ]
+            label = self.classes_label_map[img_loc.split("/")[-2]]
 
         image = Image.open(img_loc).convert("RGB")
         tensor_image = self.transform(image)
