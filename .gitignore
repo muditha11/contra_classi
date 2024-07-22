@@ -1,4 +1,6 @@
-data
 logs
 __pycache__
 *.ipynb
+annots
+microscopic_images
+oxford*

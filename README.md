@@ -47,11 +47,33 @@ Micro dataset<br>
 Pet dataset<br>
 ![pet](images/pet_low_data.png)<br>
 
-All clustering plots can be viewed interactively [here](outputs).
+All clustering plots can be viewed interactively [here](outputs). (Recommended to download the .html file and open in the browser)
 
 ## Reproduce results
 
+### Prepare data
 
+Download <a href="https://pytorch.org/vision/main/generated/torchvision.datasets.OxfordIIITPet.html" target="_blank">oxford pet dataset</a> and <a href="https://www.kaggle.com/datasets/joebeachcapital/defungi?resource=download" target="_blank">microscopic images dataset</a>  and place in the data folder.
 
-annots: https://drive.google.com/drive/folders/1a-zzC2Gyu-7nwQ6KanNKCFcw099U6E6w?usp=sharing
+Download the <a href="https://drive.google.com/drive/folders/1a-zzC2Gyu-7nwQ6KanNKCFcw099U6E6w?usp=sharing" target="_blank">annots</a> folder and place in the data folder.
+
+    ├── data                   
+        ├── annots         
+        ├── microscopic_images    
+        ├── oxford-iiit-pet     
+
+### Training
+
+Run the following command,
+
+```bash
+python main.py --config "path_to_config_file" --device "device_id"
+```
+Example:
+Run training for pet classification,
+```bash
+python main.py --config configs/pet_convnext_classi_config.yaml --device 0
+```
+
+You can easily change the config files to run these tests on custom datasets after preparing the dataset accordingly.
 
